@@ -1,15 +1,28 @@
 package com.kevin.booksales.service.impl;
 
+import com.kevin.booksales.BusinessException;
 import com.kevin.booksales.domain.customer.CustomerRepository;
 import com.kevin.booksales.domain.customer.Customer;
+import com.kevin.booksales.domain.membership.Membership;
+import com.kevin.booksales.domain.membership.MembershipFactory;
+import com.kevin.booksales.domain.membership.MembershipLevel;
+import com.kevin.booksales.domain.membership.MembershipRepository;
+import com.kevin.booksales.service.AppExceptionMessage;
 import com.kevin.booksales.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private MembershipRepository membershipRepository;
 
     @Override
     public Customer selectById(int customerId) {
@@ -17,9 +30,35 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public int payForPremium(int customerId) {
+    public String payForPremium(int customerId) {
         Customer customer = customerRepository.selectByPrimaryKey(customerId);
-        return 0;
+        if(customer == null){
+            BusinessException.throwException(AppExceptionMessage.CUSTOMER_NOT_EXIST_CODE, AppExceptionMessage.CUSTOMER_NOT_EXIST, customerId);
+        }
+
+        //Todo: payment service
+
+        //compute the expire date +12 months
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(new Date());
+        c.add(Calendar.MONTH, 6);
+        Date expireDate = c.getTime();
+        String expireStr = format.format(expireDate);
+
+        Membership oldMembership = membershipRepository.selectOneByIdAndLevel(customer.getCustomerid(), MembershipLevel.PREMIUM.getCode());
+
+        if(oldMembership == null){
+            Membership membership = MembershipFactory.createMembership(customer, MembershipLevel.PREMIUM);
+            membership.setExpire(expireDate);
+            membershipRepository.insert(membership);
+        }else{
+            oldMembership.setExpire(expireDate);
+            membershipRepository.updateByPrimaryKey(oldMembership);
+        }
+
+        return expireStr;
 
     }
 }

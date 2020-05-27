@@ -22,8 +22,8 @@ public class CustomerController {
 
     @RequestMapping(value = "premium")
     public ResultMessage payForPremium(@RequestParam(value = "id") int id){
-        Customer customer = customerService.selectById(id);
-        return ResultMessage.success(customer);
+        String expire = customerService.payForPremium(id);
+        return ResultMessage.success(expire);
     }
 
 }

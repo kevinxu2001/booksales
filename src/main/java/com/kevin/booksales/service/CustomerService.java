@@ -6,6 +6,6 @@ public interface CustomerService {
 
     Customer selectById(int customerId);
 
-    int payForPremium(int customerId);
+    String payForPremium(int customerId);
 
 }

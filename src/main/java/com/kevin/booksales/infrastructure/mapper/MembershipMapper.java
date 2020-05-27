@@ -6,4 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MembershipMapper extends BaseMapper<Membership> {
 
+    Membership selectOneByIdAndLevel(int customerid, int levelcode);
+
 }

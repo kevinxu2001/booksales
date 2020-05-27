@@ -13,9 +13,9 @@ import lombok.Data;
 @Data
 public class Membership implements Entity<Membership> {
     /**
-     * code
+     * id
      */
-    private Integer levelcode;
+    private int id;
 
     /**
      * 等级名称
@@ -25,17 +25,28 @@ public class Membership implements Entity<Membership> {
     /**
      * 会员id
      */
-    private Integer customerid;
+    private int customerid;
 
     /**
      * 折扣
      */
-    private Integer discount;
+    private int discount;
 
     /**
      * 创建时间
      */
     private Date createdtime;
+
+    /**
+     * 会员过期日期
+     */
+    private Date expire;
+
+    /**
+     * code
+     */
+    private int levelcode;
+
 
     private static final long serialVersionUID = 1L;
 

@@ -1,4 +1,4 @@
-package com.kevin.booksales.domain.customer;
+package com.kevin.booksales.domain.membership;
 
 public enum MembershipLevel {
     NORMAL(1, "premium", 100),
