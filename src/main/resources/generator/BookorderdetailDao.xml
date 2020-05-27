@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generate.BookorderdetailDao">
+  <resultMap id="BaseResultMap" type="generate.Bookorderdetail">
+    <id column="serialId" jdbcType="VARCHAR" property="serialid" />
+    <result column="orderId" jdbcType="VARCHAR" property="orderid" />
+    <result column="bookId" jdbcType="VARCHAR" property="bookid" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="createdTime" jdbcType="TIMESTAMP" property="createdtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    serialId, orderId, bookId, amount, `count`, createdTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bookOrderDetail
+    where serialId = #{serialid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bookOrderDetail
+    where serialId = #{serialid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="serialId" keyProperty="serialid" parameterType="generate.Bookorderdetail" useGeneratedKeys="true">
+    insert into bookOrderDetail (orderId, bookId, amount, 
+      `count`, createdTime)
+    values (#{orderid,jdbcType=VARCHAR}, #{bookid,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+      #{count,jdbcType=INTEGER}, #{createdtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="serialId" keyProperty="serialid" parameterType="generate.Bookorderdetail" useGeneratedKeys="true">
+    insert into bookOrderDetail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        orderId,
+      </if>
+      <if test="bookid != null">
+        bookId,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="count != null">
+        `count`,
+      </if>
+      <if test="createdtime != null">
+        createdTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderid != null">
+        #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="bookid != null">
+        #{bookid,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="createdtime != null">
+        #{createdtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="generate.Bookorderdetail">
+    update bookOrderDetail
+    <set>
+      <if test="orderid != null">
+        orderId = #{orderid,jdbcType=VARCHAR},
+      </if>
+      <if test="bookid != null">
+        bookId = #{bookid,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="count != null">
+        `count` = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="createdtime != null">
+        createdTime = #{createdtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where serialId = #{serialid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="generate.Bookorderdetail">
+    update bookOrderDetail
+    set orderId = #{orderid,jdbcType=VARCHAR},
+      bookId = #{bookid,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      `count` = #{count,jdbcType=INTEGER},
+      createdTime = #{createdtime,jdbcType=TIMESTAMP}
+    where serialId = #{serialid,jdbcType=VARCHAR}
+  </update>
+</mapper>

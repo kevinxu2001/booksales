@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kevin.booksales.infrastructure.mapper.CustomerMapper">
+  <resultMap id="BaseResultMap" type="com.kevin.booksales.domain.customer.Customer">
+    <id column="customer_customerId" jdbcType="INTEGER" property="customerid" />
+    <result column="customer_name" jdbcType="VARCHAR" property="name" />
+    <result column="customer_createdTime" jdbcType="TIMESTAMP" property="createdtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    customer.customerId as customer_customerId, customer.`name` as `customer_name`, customer.createdTime as customer_createdTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer customer
+    where customer.customerId = #{customerid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from customer
+    where customerId = #{customerid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="customerId" keyProperty="customerid" parameterType="com.kevin.booksales.domain.customer.Customer" useGeneratedKeys="true">
+    insert into customer (`name`, createdTime)
+    values (#{name,jdbcType=VARCHAR}, #{createdtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="customerId" keyProperty="customerid" parameterType="com.kevin.booksales.domain.customer.Customer" useGeneratedKeys="true">
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="createdtime != null">
+        createdTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createdtime != null">
+        #{createdtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kevin.booksales.domain.customer.Customer">
+    update customer
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createdtime != null">
+        createdTime = #{createdtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where customerId = #{customerid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kevin.booksales.domain.customer.Customer">
+    update customer
+    set `name` = #{name,jdbcType=VARCHAR},
+      createdTime = #{createdtime,jdbcType=TIMESTAMP}
+    where customerId = #{customerid,jdbcType=INTEGER}
+  </update>
+</mapper>

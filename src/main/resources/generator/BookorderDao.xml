@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generate.BookorderDao">
+  <resultMap id="BaseResultMap" type="generate.Bookorder">
+    <id column="orderId" jdbcType="VARCHAR" property="orderid" />
+    <result column="customerId" jdbcType="INTEGER" property="customerid" />
+    <result column="amount" jdbcType="DECIMAL" property="amount" />
+    <result column="discount" jdbcType="INTEGER" property="discount" />
+    <result column="realPaid" jdbcType="DECIMAL" property="realpaid" />
+    <result column="createdTime" jdbcType="TIMESTAMP" property="createdtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    orderId, customerId, amount, discount, realPaid, createdTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from bookOrder
+    where orderId = #{orderid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from bookOrder
+    where orderId = #{orderid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="orderId" keyProperty="orderid" parameterType="generate.Bookorder" useGeneratedKeys="true">
+    insert into bookOrder (customerId, amount, discount, 
+      realPaid, createdTime)
+    values (#{customerid,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{discount,jdbcType=INTEGER}, 
+      #{realpaid,jdbcType=DECIMAL}, #{createdtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="orderId" keyProperty="orderid" parameterType="generate.Bookorder" useGeneratedKeys="true">
+    insert into bookOrder
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="customerid != null">
+        customerId,
+      </if>
+      <if test="amount != null">
+        amount,
+      </if>
+      <if test="discount != null">
+        discount,
+      </if>
+      <if test="realpaid != null">
+        realPaid,
+      </if>
+      <if test="createdtime != null">
+        createdTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="customerid != null">
+        #{customerid,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null">
+        #{discount,jdbcType=INTEGER},
+      </if>
+      <if test="realpaid != null">
+        #{realpaid,jdbcType=DECIMAL},
+      </if>
+      <if test="createdtime != null">
+        #{createdtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="generate.Bookorder">
+    update bookOrder
+    <set>
+      <if test="customerid != null">
+        customerId = #{customerid,jdbcType=INTEGER},
+      </if>
+      <if test="amount != null">
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="discount != null">
+        discount = #{discount,jdbcType=INTEGER},
+      </if>
+      <if test="realpaid != null">
+        realPaid = #{realpaid,jdbcType=DECIMAL},
+      </if>
+      <if test="createdtime != null">
+        createdTime = #{createdtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where orderId = #{orderid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="generate.Bookorder">
+    update bookOrder
+    set customerId = #{customerid,jdbcType=INTEGER},
+      amount = #{amount,jdbcType=DECIMAL},
+      discount = #{discount,jdbcType=INTEGER},
+      realPaid = #{realpaid,jdbcType=DECIMAL},
+      createdTime = #{createdtime,jdbcType=TIMESTAMP}
+    where orderId = #{orderid,jdbcType=VARCHAR}
+  </update>
+</mapper>

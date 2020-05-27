@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kevin.booksales.infrastructure.mapper.BookMapper">
+  <resultMap id="BaseResultMap" type="com.kevin.booksales.domain.book.Book">
+    <id column="book_bookId" jdbcType="VARCHAR" property="bookid" />
+    <result column="book_bookName" jdbcType="VARCHAR" property="bookname" />
+    <result column="book_price" jdbcType="DECIMAL" property="price" />
+    <result column="book_createdTime" jdbcType="TIMESTAMP" property="createdtime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    book.bookId as book_bookId, book.bookName as book_bookName, book.price as book_price, 
+    book.createdTime as book_createdTime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from book book
+    where book.bookId = #{bookid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from book
+    where bookId = #{bookid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" keyColumn="bookId" keyProperty="bookid" parameterType="com.kevin.booksales.domain.book.Book" useGeneratedKeys="true">
+    insert into book (bookName, price, createdTime
+      )
+    values (#{bookname,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{createdtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="bookId" keyProperty="bookid" parameterType="com.kevin.booksales.domain.book.Book" useGeneratedKeys="true">
+    insert into book
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bookname != null">
+        bookName,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="createdtime != null">
+        createdTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bookname != null">
+        #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="createdtime != null">
+        #{createdtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.kevin.booksales.domain.book.Book">
+    update book
+    <set>
+      <if test="bookname != null">
+        bookName = #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="createdtime != null">
+        createdTime = #{createdtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where bookId = #{bookid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.kevin.booksales.domain.book.Book">
+    update book
+    set bookName = #{bookname,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      createdTime = #{createdtime,jdbcType=TIMESTAMP}
+    where bookId = #{bookid,jdbcType=VARCHAR}
+  </update>
+</mapper>
