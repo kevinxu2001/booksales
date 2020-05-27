@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -27,6 +28,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer selectById(int customerId) {
         return customerRepository.selectByPrimaryKey(customerId);
+    }
+
+    @Override
+    public List<Membership> memberships(int customerId) {
+        Customer customer = customerRepository.selectByPrimaryKey(customerId);
+        customer.Memberships(membershipRepository);
+        return customer.getMembershipList();
     }
 
     @Override

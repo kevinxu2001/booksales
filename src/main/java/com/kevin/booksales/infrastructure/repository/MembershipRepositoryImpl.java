@@ -12,7 +12,7 @@ import java.util.List;
 public class MembershipRepositoryImpl implements MembershipRepository {
 
     @Autowired
-    MembershipMapper membershipMapper;
+    private MembershipMapper membershipMapper;
 
     @Override
     public void deleteByPrimaryKey(Integer id) {
@@ -54,5 +54,10 @@ public class MembershipRepositoryImpl implements MembershipRepository {
     @Override
     public Membership selectOneByIdAndLevel(int customerid, int levelcode) {
         return membershipMapper.selectOneByIdAndLevel(customerid, levelcode);
+    }
+
+    @Override
+    public List<Membership> selectByCustomerId(int customerid){
+        return membershipMapper.selectByCustomerId(customerid);
     }
 }

@@ -2,17 +2,18 @@ package com.kevin.booksales.domain.customer;
 
 import com.kevin.booksales.domain.Entity;
 import com.kevin.booksales.domain.membership.Membership;
+import com.kevin.booksales.domain.membership.MembershipRepository;
+import com.kevin.booksales.domain.point.PointRepository;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(of = {"customerid"})
 public class Customer implements Entity<Customer> {
-
-    @Autowired
-    private Membership membership;
 
     /**
      * id
@@ -32,12 +33,22 @@ public class Customer implements Entity<Customer> {
     /**
      * 会员权益
      */
-    List<Membership> membershipList;
+    private List<Membership> membershipList;
 
-    public void payForPremium(){
+    /**
+     * 总积分
+     */
+    private int totalPoint;
 
+
+    public void Memberships(MembershipRepository membershipRepository) {
+        List<Membership> membershipList = membershipRepository.selectByCustomerId(this.getCustomerid());
+        this.membershipList = membershipList;
     }
 
+    public void TotalPoint(){
+
+    }
 
     @Override
     public boolean sameInentifyAs(Customer other) {

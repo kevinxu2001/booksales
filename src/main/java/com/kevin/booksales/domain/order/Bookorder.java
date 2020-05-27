@@ -3,8 +3,10 @@ package com.kevin.booksales.domain.order;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.kevin.booksales.domain.Entity;
+import com.kevin.booksales.domain.membership.Membership;
 import lombok.Data;
 
 /**
@@ -43,10 +45,13 @@ public class Bookorder implements Entity<Bookorder> {
      */
     private Date createdtime;
 
+
+
     private static final long serialVersionUID = 1L;
 
     @Override
     public boolean sameInentifyAs(Bookorder other) {
         return false;
     }
+
 }
