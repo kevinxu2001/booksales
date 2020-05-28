@@ -7,6 +7,8 @@ import com.kevin.booksales.domain.membership.Membership;
 import com.kevin.booksales.domain.membership.MembershipFactory;
 import com.kevin.booksales.domain.membership.MembershipLevel;
 import com.kevin.booksales.domain.membership.MembershipRepository;
+import com.kevin.booksales.domain.point.Point;
+import com.kevin.booksales.domain.point.PointRepository;
 import com.kevin.booksales.service.AppExceptionMessage;
 import com.kevin.booksales.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private MembershipRepository membershipRepository;
+
+    @Autowired
+    private PointRepository pointRepository;
 
     @Override
     public Customer selectById(int customerId) {
@@ -68,5 +73,25 @@ public class CustomerServiceImpl implements CustomerService {
 
         return expireStr;
 
+    }
+
+    @Override
+    public int totalPoint(int customerId) {
+        Customer customer = customerRepository.selectByPrimaryKey(customerId);
+        if(customer == null){
+            BusinessException.throwException(AppExceptionMessage.CUSTOMER_NOT_EXIST_CODE, AppExceptionMessage.CUSTOMER_NOT_EXIST, customerId);
+        }
+        customer.TotalPoint(pointRepository);
+
+        return customer.getTotalPoint();
+    }
+
+    @Override
+    public List<Point> pointList(int customerId) {
+        Customer customer = customerRepository.selectByPrimaryKey(customerId);
+        if(customer == null){
+            BusinessException.throwException(AppExceptionMessage.CUSTOMER_NOT_EXIST_CODE, AppExceptionMessage.CUSTOMER_NOT_EXIST, customerId);
+        }
+        return pointRepository.selectAllByCustomerid(customerId);
     }
 }

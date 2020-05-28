@@ -43,4 +43,14 @@ public class PointRepositoryImpl implements PointRepository {
     public void updateByPrimaryKey(Point point) {
 
     }
+
+    @Override
+    public int selectCountByCustomerid(int customerId) {
+        return pointMapper.selectCountByCustomerid(customerId);
+    }
+
+    @Override
+    public List<Point> selectAllByCustomerid(int customerId) {
+        return pointMapper.selectAllByCustomerid(customerId);
+    }
 }

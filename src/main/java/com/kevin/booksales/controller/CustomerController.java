@@ -2,6 +2,7 @@ package com.kevin.booksales.controller;
 
 import com.kevin.booksales.domain.customer.Customer;
 import com.kevin.booksales.domain.membership.Membership;
+import com.kevin.booksales.domain.point.Point;
 import com.kevin.booksales.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,16 +18,16 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @RequestMapping(value = "info")
-    public ResultMessage info(@RequestParam(value = "id") int id){
-        Customer customer = customerService.selectById(id);
-        return ResultMessage.success(customer);
+    @RequestMapping(value = "pointlist")
+    public ResultMessage pointlist(@RequestParam(value = "id") int customerid){
+        List<Point> pointList = customerService.pointList(customerid);
+        return ResultMessage.success(pointList);
     }
 
-    @RequestMapping(value = "memberships")
-    public ResultMessage memberships(@RequestParam(value = "id") int id){
-        List<Membership> membershipList = customerService.memberships(id);
-        return ResultMessage.success(membershipList);
+    @RequestMapping(value = "totalpoint")
+    public ResultMessage totalpoint(@RequestParam(value = "id") int customerid){
+        int total = customerService.totalPoint(customerid);
+        return ResultMessage.success(total);
     }
 
     @RequestMapping(value = "premium")

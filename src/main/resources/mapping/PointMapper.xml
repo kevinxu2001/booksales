@@ -17,6 +17,21 @@
     from point
     where serialId = #{serialid,jdbcType=VARCHAR}
   </select>
+
+  <select id="selectAllByCustomerid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from point
+    where customerId = #{customerId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectCountByCustomerid" resultType="java.lang.Integer">
+    select
+    sum(point) as totalPoint
+    from point
+    where customerId = #{customerId,jdbcType=INTEGER}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from point
     where serialId = #{serialid,jdbcType=VARCHAR}

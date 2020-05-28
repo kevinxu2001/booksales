@@ -84,8 +84,9 @@ public class Customer implements Entity<Customer> {
         return this.isPremium;
     }
 
-    public void TotalPoint(){
-
+    public void TotalPoint(PointRepository pointRepository){
+        int totalpoint = pointRepository.selectCountByCustomerid(this.customerid);
+        this.totalPoint = totalpoint;
     }
 
     @Override
