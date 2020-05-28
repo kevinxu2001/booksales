@@ -24,7 +24,7 @@ public class CustomerController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "int")
     })
-    @RequestMapping(value = "paypremium", method = {RequestMethod.GET})
+    @RequestMapping(value = "paypremium", method = {RequestMethod.POST})
     public ResultMessage payForPremium(@RequestParam(value = "id") int id){
         String expire = customerService.payForPremium(id);
         return ResultMessage.success(expire);

@@ -21,11 +21,11 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @ApiOperation(value="图书购买-生成订单", notes="图书购买-生成订单")
+    @ApiOperation(value="图书购买-生成订单", notes="图书购买-生成订单，因购物车功能未实现，所以缺少参数购物车商品ID，但在接口内部模拟购物车数据。")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "int")
     })
-    @RequestMapping(value = "create", method = {RequestMethod.GET})
+    @RequestMapping(value = "create", method = {RequestMethod.POST})
     public ResultMessage create(@RequestParam(value = "id") int customerid){
         //test data
         List<String> shopCartIdList = new ArrayList<>();
@@ -41,7 +41,7 @@ public class OrderController {
             @ApiImplicitParam(name = "id", value = "用户ID", required = true, dataType = "int"),
             @ApiImplicitParam(name = "orderid", value = "订单ID", required = true, dataType = "String"),
     })
-    @RequestMapping(value = "pay", method = {RequestMethod.GET})
+    @RequestMapping(value = "pay", method = {RequestMethod.POST})
     public ResultMessage pay(@RequestParam(value = "id") int customerid, @RequestParam(value = "orderid") String orderid){
 
         orderService.pay(customerid, orderid);
