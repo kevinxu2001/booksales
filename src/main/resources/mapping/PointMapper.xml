@@ -22,9 +22,9 @@
     where serialId = #{serialid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" keyColumn="serialId" keyProperty="serialid" parameterType="com.kevin.booksales.domain.point.Point" useGeneratedKeys="true">
-    insert into point (customerId, actionCode, point, 
+    insert into point (serialId, customerId, actionCode, point,
       createdTime)
-    values (#{customerid,jdbcType=INTEGER}, #{actioncode,jdbcType=INTEGER}, #{point,jdbcType=INTEGER}, 
+    values (#{serialid,jdbcType=VARCHAR}, #{customerid,jdbcType=INTEGER}, #{actioncode,jdbcType=INTEGER}, #{point,jdbcType=INTEGER},
       #{createdtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="serialId" keyProperty="serialid" parameterType="com.kevin.booksales.domain.point.Point" useGeneratedKeys="true">

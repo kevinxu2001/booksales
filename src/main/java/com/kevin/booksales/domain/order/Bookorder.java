@@ -8,6 +8,7 @@ import java.util.List;
 import com.kevin.booksales.domain.Entity;
 import com.kevin.booksales.domain.membership.Membership;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 /**
  * book
@@ -60,6 +61,13 @@ public class Bookorder implements Entity<Bookorder> {
         return false;
     }
 
-    //public void pay()
+    public void pay(BigDecimal realpaid, int discount){
+
+        Assert.isTrue(realpaid.intValue() > 0, "The amount must be bigger than 0.");
+        this.realpaid = realpaid;
+        this.discount = discount;
+        this.status = OrderStatus.PAID.getCode();
+
+    }
 
 }

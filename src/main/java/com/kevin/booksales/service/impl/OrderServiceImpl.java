@@ -3,9 +3,13 @@ package com.kevin.booksales.service.impl;
 import com.kevin.booksales.BusinessException;
 import com.kevin.booksales.domain.customer.Customer;
 import com.kevin.booksales.domain.customer.CustomerRepository;
-import com.kevin.booksales.domain.membership.Membership;
+import com.kevin.booksales.domain.membership.MembershipLevel;
 import com.kevin.booksales.domain.membership.MembershipRepository;
 import com.kevin.booksales.domain.order.*;
+import com.kevin.booksales.domain.point.Point;
+import com.kevin.booksales.domain.point.PointAcrtion;
+import com.kevin.booksales.domain.point.PointFactory;
+import com.kevin.booksales.domain.point.PointRepository;
 import com.kevin.booksales.service.AppExceptionMessage;
 import com.kevin.booksales.service.OrderService;
 import com.kevin.booksales.utils.IdGenerator;
@@ -31,22 +35,31 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     BookorderdetailRepository bookorderdetailRepository;
 
+    @Autowired
+    PointRepository pointRepository;
+
 
     public static final IdGenerator ID_GENERATOR = IdGenerator.INSTANCE;
 
     @Override
     public Bookorder create(int customerId, List<String> cartidList) {
-        //get cart list
+        /**
+         * get cart list
+         */
         List<ShopCart> shopCartList = this.readShopcart();
 
 
-        //check customer isPremium
+        /**
+         * check customer isPremium
+         */
         Customer customer = customerRepository.selectByPrimaryKey(customerId);
         if (!customer.isPremium(membershipRepository) || !customer.isVip(membershipRepository)) {
             BusinessException.throwException(AppExceptionMessage.NORMAL_MEMBER_CAN_NOT_PAY_CODE, AppExceptionMessage.NORMAL_MEMBER_CAN_NOT_PAY, customerId);
         }
 
-        //create bookorder
+        /**
+         * create bookOrder
+         */
         BigDecimal amount = new BigDecimal("0");
         for (ShopCart shopCart: shopCartList){
             BigDecimal count = BigDecimal.valueOf((int)shopCart.getCount());
@@ -58,28 +71,78 @@ public class OrderServiceImpl implements OrderService {
         Bookorder order = BookorderFactory.creaetOrder(customerId, ID_GENERATOR.nextId(), amount );
         bookorderRepository.insert(order);
 
-        //create bookOrderDetail
+        /**
+         * create bookOrderDetail
+         */
+        for (ShopCart shopCart: shopCartList){
+            String serial = ID_GENERATOR.nextId();
+            Bookorderdetail bookorderdetail = BookorderdetailFactory.createDetail(serial, order.getOrderid(), shopCart);
+            bookorderdetailRepository.insert(bookorderdetail);
+        }
 
 
         return bookorderRepository.selectByPrimaryKey(order.getOrderid());
     }
 
     @Override
-    public String pay(String orderId) {
-        //check order status
+    public void pay(int customerId, String orderId) {
 
-        //is vip
+        Bookorder bookorder = bookorderRepository.selectByPrimaryKey(orderId);
+        if (bookorder == null){
+            BusinessException.throwException(AppExceptionMessage.ORDER_NOT_EXIST_CODE, AppExceptionMessage.ORDER_NOT_EXIST, orderId);
+        }
 
+        /**
+         * check order status
+         */
+        if ( bookorder.getStatus() != OrderStatus.CREATED.getCode()){
+            BusinessException.throwException(AppExceptionMessage.ORDER_PAID_CODE, AppExceptionMessage.ORDER_PAID, orderId);
+        }
+
+
+        Customer customer = customerRepository.selectByPrimaryKey(customerId);
+        if(customer == null){
+            BusinessException.throwException(AppExceptionMessage.CUSTOMER_NOT_EXIST_CODE, AppExceptionMessage.CUSTOMER_NOT_EXIST, customerId);
+        }
+        customer.isVip(membershipRepository);
+        customer.isPremium(membershipRepository);
+
+        int discount = 100;
+        /**
+         * is vip
+         */
+        if (customer.isVip()){
+            discount = MembershipLevel.VIP.getDiscount();
+        }else if(customer.isPremium()){
         //is premium
+            discount = MembershipLevel.PREMIUM.getDiscount();
 
-        //calculate amount with discount
+        }else{
+            BusinessException.throwException(AppExceptionMessage.NORMAL_MEMBER_CAN_NOT_PAY_CODE, AppExceptionMessage.NORMAL_MEMBER_CAN_NOT_PAY, customerId);
+        }
 
-        //pay
+        /**
+         * calculate amount with discount
+         */
+        double d = discount/100d;
+        BigDecimal discountDec = BigDecimal.valueOf(d);
+        BigDecimal realAmount = bookorder.getAmount().multiply(discountDec);
 
-        //gain point
+        /**
+         * pay
+         */
+        bookorder.pay(realAmount, discount);
+        bookorderRepository.updateByPrimaryKey(bookorder);
+
+
+        /**
+         * gain points
+         */
+        int gainPoints = (int)(realAmount.intValue()*0.1);
+        Point point = PointFactory.createPoint(customerId, ID_GENERATOR.nextId(), PointAcrtion.ORDER_PAID, gainPoints);
+        pointRepository.insert(point);
 
         //success
-        return null;
     }
 
     //for test , build ShopCart list

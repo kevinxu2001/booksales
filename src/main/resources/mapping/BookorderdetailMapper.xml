@@ -23,9 +23,9 @@
     where serialId = #{serialid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" keyColumn="serialId" keyProperty="serialid" parameterType="com.kevin.booksales.domain.order.Bookorderdetail" useGeneratedKeys="true">
-    insert into bookOrderDetail (orderId, bookId, amount, 
+    insert into bookOrderDetail (serialId, orderId, bookId, amount,
       `count`, createdTime)
-    values (#{orderid,jdbcType=VARCHAR}, #{bookid,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, 
+    values (#{serialid,jdbcType=VARCHAR}, #{orderid,jdbcType=VARCHAR}, #{bookid,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL},
       #{count,jdbcType=INTEGER}, #{createdtime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="serialId" keyProperty="serialid" parameterType="com.kevin.booksales.domain.order.Bookorderdetail" useGeneratedKeys="true">

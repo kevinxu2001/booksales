@@ -41,6 +41,7 @@ public class BookorderRepositoryImpl implements BookorderRepository {
 
     @Override
     public void updateByPrimaryKey(Bookorder bookorder) {
+        bookorderMapper.updateByPrimaryKey(bookorder);
 
     }
 

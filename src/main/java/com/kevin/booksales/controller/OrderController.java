@@ -18,7 +18,7 @@ public class OrderController {
     private OrderService orderService;
 
     @RequestMapping(value = "create")
-    public ResultMessage info(@RequestParam(value = "id") int customerid){
+    public ResultMessage create(@RequestParam(value = "id") int customerid){
         //test data
         List<String> shopCartIdList = new ArrayList<>();
         shopCartIdList.add("111");
@@ -26,5 +26,14 @@ public class OrderController {
 
         Bookorder bookorder = orderService.create(customerid, shopCartIdList);
         return ResultMessage.success(bookorder);
+    }
+
+
+    @RequestMapping(value = "pay")
+    public ResultMessage pay(@RequestParam(value = "id") int customerid, @RequestParam(value = "orderid") String orderid){
+
+        orderService.pay(customerid, orderid);
+        return ResultMessage.success();
+
     }
 }

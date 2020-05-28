@@ -8,5 +8,5 @@ public interface OrderService {
 
     Bookorder create(int customerId, List<String> cartList);
 
-    String pay(String orderId);
+    void pay(int customerId, String orderId);
 }
