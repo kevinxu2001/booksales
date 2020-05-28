@@ -113,7 +113,7 @@
     select
     <include refid="Base_Column_List" />
     from membership
-    WHERE customerId = #{customerid} AND id = #{levelcode}
+    WHERE customerId = #{customerid} AND levelCode = #{levelcode}
   </select>
 
   <select id="selectByCustomerId" resultMap="BaseResultMap">

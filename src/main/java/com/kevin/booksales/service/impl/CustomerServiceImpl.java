@@ -49,9 +49,13 @@ public class CustomerServiceImpl implements CustomerService {
             BusinessException.throwException(AppExceptionMessage.CUSTOMER_NOT_EXIST_CODE, AppExceptionMessage.CUSTOMER_NOT_EXIST, customerId);
         }
 
+        if(customer.isPremium(membershipRepository)){
+            BusinessException.throwException(AppExceptionMessage.ALREADY_PREMIUM_CODE, AppExceptionMessage.ALREADY_PREMIUM, customerId);
+        }
+
         //Todo: payment service
 
-        //compute the expire date +12 months
+        //compute the expire date +6 months
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
 

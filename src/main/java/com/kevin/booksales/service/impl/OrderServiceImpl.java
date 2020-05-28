@@ -53,7 +53,7 @@ public class OrderServiceImpl implements OrderService {
          * check customer isPremium
          */
         Customer customer = customerRepository.selectByPrimaryKey(customerId);
-        if (!customer.isPremium(membershipRepository) || !customer.isVip(membershipRepository)) {
+        if (!customer.isPremium(membershipRepository) && !customer.isVip(membershipRepository)) {
             BusinessException.throwException(AppExceptionMessage.NORMAL_MEMBER_CAN_NOT_PAY_CODE, AppExceptionMessage.NORMAL_MEMBER_CAN_NOT_PAY, customerId);
         }
 
