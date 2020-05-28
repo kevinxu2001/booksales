@@ -41,6 +41,12 @@ public class Bookorder implements Entity<Bookorder> {
     private BigDecimal realpaid;
 
     /**
+     * 0,未支付；
+     1，已支付；
+     */
+    private Integer status;
+
+    /**
      * 创建时间
      */
     private Date createdtime;
@@ -53,5 +59,7 @@ public class Bookorder implements Entity<Bookorder> {
     public boolean sameInentifyAs(Bookorder other) {
         return false;
     }
+
+    //public void pay()
 
 }

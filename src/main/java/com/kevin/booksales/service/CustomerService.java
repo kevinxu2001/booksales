@@ -8,6 +8,7 @@ import java.util.List;
 public interface CustomerService {
 
     Customer selectById(int customerId);
+
     List<Membership> memberships(int customerId);
 
     String payForPremium(int customerId);

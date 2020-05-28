@@ -7,10 +7,11 @@
     <result column="amount" jdbcType="DECIMAL" property="amount" />
     <result column="discount" jdbcType="INTEGER" property="discount" />
     <result column="realPaid" jdbcType="DECIMAL" property="realpaid" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="createdTime" jdbcType="TIMESTAMP" property="createdtime" />
   </resultMap>
   <sql id="Base_Column_List">
-    orderId, customerId, amount, discount, realPaid, createdTime
+    orderId, customerId, amount, discount, realPaid, `status`, createdTime
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
@@ -22,13 +23,15 @@
     delete from bookOrder
     where orderId = #{orderid,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" keyColumn="orderId" keyProperty="orderid" parameterType="com.kevin.booksales.domain.order.Bookorder" useGeneratedKeys="true">
-    insert into bookOrder (customerId, amount, discount,
-      realPaid, createdTime)
-    values (#{customerid,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{discount,jdbcType=INTEGER},
-      #{realpaid,jdbcType=DECIMAL}, #{createdtime,jdbcType=TIMESTAMP})
+  <insert id="insert" keyColumn="orderId" keyProperty="orderid" parameterType="com.kevin.booksales.infrastructure.mapper.BookorderMapper" useGeneratedKeys="true">
+    insert into bookOrder (orderId, customerId, amount, discount,
+      realPaid, `status`, createdTime
+      )
+    values (#{orderid,jdbcType=VARCHAR}, #{customerid,jdbcType=INTEGER}, #{amount,jdbcType=DECIMAL}, #{discount,jdbcType=INTEGER},
+      #{realpaid,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{createdtime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" keyColumn="orderId" keyProperty="orderid" parameterType="com.kevin.booksales.domain.order.Bookorder" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="orderId" keyProperty="orderid" parameterType="com.kevin.booksales.infrastructure.mapper.BookorderMapper" useGeneratedKeys="true">
     insert into bookOrder
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="customerid != null">
@@ -42,6 +45,9 @@
       </if>
       <if test="realpaid != null">
         realPaid,
+      </if>
+      <if test="status != null">
+        `status`,
       </if>
       <if test="createdtime != null">
         createdTime,
@@ -60,12 +66,15 @@
       <if test="realpaid != null">
         #{realpaid,jdbcType=DECIMAL},
       </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
       <if test="createdtime != null">
         #{createdtime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.kevin.booksales.domain.order.Bookorder">
+  <update id="updateByPrimaryKeySelective" parameterType="com.kevin.booksales.infrastructure.mapper.BookorderMapper">
     update bookOrder
     <set>
       <if test="customerid != null">
@@ -80,18 +89,22 @@
       <if test="realpaid != null">
         realPaid = #{realpaid,jdbcType=DECIMAL},
       </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
       <if test="createdtime != null">
         createdTime = #{createdtime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where orderId = #{orderid,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.kevin.booksales.domain.order.Bookorder">
+  <update id="updateByPrimaryKey" parameterType="com.kevin.booksales.infrastructure.mapper.BookorderMapper">
     update bookOrder
     set customerId = #{customerid,jdbcType=INTEGER},
       amount = #{amount,jdbcType=DECIMAL},
       discount = #{discount,jdbcType=INTEGER},
       realPaid = #{realpaid,jdbcType=DECIMAL},
+      `status` = #{status,jdbcType=INTEGER},
       createdTime = #{createdtime,jdbcType=TIMESTAMP}
     where orderId = #{orderid,jdbcType=VARCHAR}
   </update>
